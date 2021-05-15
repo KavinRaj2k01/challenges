@@ -1,5 +1,5 @@
 <template>
-  <div><MainScreen :userName="Kavin"> </MainScreen></div>
+  <div><MainScreen userName="Kavin"> </MainScreen></div>
 </template>
 
 <script>
