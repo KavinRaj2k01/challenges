@@ -4,16 +4,18 @@
     <StartPanel :onclickStart="onClickStart" v-if="state.panel === 'Start'" />
     <QuizPanel
       v-if="state.panel === 'Quiz'"
-      quizNo="1"
-      quizContent="Number of sides does Square have"
-      :quizOptions="['1', '2', '3', '4']"
-      quizAnswer="4"
+      :quizNo="quizzes.quizzes[state.currentQuizIndex].quizNo"
+      :quizContent="quizzes.quizzes[state.currentQuizIndex].quizContent"
+      :quizOptions="quizzes.quizzes[state.currentQuizIndex].quizOptions"
+      :quizAnswer="quizzes.quizzes[state.currentQuizIndex].quizAnswer"
       :onQuizAnswer="onQuizAnswer"
     />
-    <AnswerPanel v-if="state.panel === 'Answer'"   quizNo="1"
-      quizContent="Number of sides does Square have"
-      :quizOptions="['1', '2', '3', '4']"
-      quizAnswer="4"/>
+    <AnswerPanel v-if="state.panel === 'Answer'" 
+      :quizNo="quizzes.quizzes[state.currentQuizIndex].quizNo"
+      :quizContent="quizzes.quizzes[state.currentQuizIndex].quizContent"
+      :quizOptions="quizzes.quizzes[state.currentQuizIndex].quizOptions"
+      :quizAnswer="quizzes.quizzes[state.currentQuizIndex].quizAnswer"
+      :userClickedAnswer="userClickedAnswer"/>
   </div>
 </template>
 <script>
@@ -22,7 +24,12 @@ import Header from "../components/Header";
 import QuizPanel from "./panels/QuizPanel";
 import StartPanel from "./panels/StartPanel.vue";
 import AnswerPanel from "./panels/AnswerPanel";
+import quizzes from "../sources/quizzes.json"
 const screens = { start: "Start", quiz: "Quiz",answer:"Answer" };
+
+console.log(JSON.stringify(quizzes));
+
+
 export default {
   name: "MainScreen",
   props: ["userName"],
@@ -33,7 +40,10 @@ export default {
     AnswerPanel
   },
   data: function () {
-    return { state: { panel: screens.start } };
+    return {
+    state: { panel: screens.start, currentQuizIndex:0 } ,
+    userClickedAnswer:"",
+    quizzes:quizzes};
   },
   //{ state : {panel: screens.start}}
   methods: {
@@ -43,6 +53,7 @@ export default {
     onQuizAnswer: function (result,userClickedAnswer) {
          console.log(`Result is ${result}. ${userClickedAnswer}`);
          this.state.panel = screens.answer;
+         this.userClickedAnswer=userClickedAnswer;
     },
   },
 };
